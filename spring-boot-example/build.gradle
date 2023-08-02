@@ -1,0 +1,27 @@
+plugins {
+    id 'java'
+    id "org.springframework.boot.conventions"
+}
+
+group 'com.dyhhd'
+
+repositories {
+    mavenCentral()
+}
+
+description = "Spring Boot Example"
+
+dependencies {
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
+
+    implementation(project(":spring-boot-project:spring-boot-starters:spring-boot-starter-web"))
+    implementation(project(":spring-boot-project:spring-boot-starters:spring-boot-starter-validation"))
+    implementation(project(":spring-boot-project:spring-boot-starters:spring-boot-starter-actuator"))
+
+    implementation("org.projectlombok:lombok")
+}
+
+test {
+    useJUnitPlatform()
+}
