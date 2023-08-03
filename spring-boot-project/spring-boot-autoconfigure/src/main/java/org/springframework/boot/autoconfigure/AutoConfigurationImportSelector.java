@@ -136,6 +136,11 @@ public class AutoConfigurationImportSelector implements DeferredImportSelector, 
 
 	@Override
 	public Class<? extends Group> getImportGroup() {
+		// 实现的时 DeferredImportSelector 接口，所以会找到这个类
+		// 如果这个不为 null
+		// 那么找出找个类
+		// 执行 process 方法
+		// 进行 selectImports 回调
 		return AutoConfigurationGroup.class;
 	}
 
@@ -183,6 +188,7 @@ public class AutoConfigurationImportSelector implements DeferredImportSelector, 
 	protected List<String> getCandidateConfigurations(AnnotationMetadata metadata, AnnotationAttributes attributes) {
 		List<String> configurations = new ArrayList<>(
 				SpringFactoriesLoader.loadFactoryNames(getSpringFactoriesLoaderFactoryClass(), getBeanClassLoader()));
+		// 获取所有的 META-INF/spring/org.springframework.boot.autoconfigure.AutoConfiguration.imports" 里面的类
 		ImportCandidates.load(AutoConfiguration.class, getBeanClassLoader()).forEach(configurations::add);
 		Assert.notEmpty(configurations,
 				"No auto configuration classes found in META-INF/spring.factories nor in META-INF/spring/org.springframework.boot.autoconfigure.AutoConfiguration.imports. If you "
@@ -263,6 +269,7 @@ public class AutoConfigurationImportSelector implements DeferredImportSelector, 
 	}
 
 	protected List<AutoConfigurationImportFilter> getAutoConfigurationImportFilters() {
+		// META-INF/spring.factories 中获取 AutoConfigurationImportFilter 的类
 		return SpringFactoriesLoader.loadFactories(AutoConfigurationImportFilter.class, this.beanClassLoader);
 	}
 
@@ -298,6 +305,7 @@ public class AutoConfigurationImportSelector implements DeferredImportSelector, 
 	}
 
 	protected List<AutoConfigurationImportListener> getAutoConfigurationImportListeners() {
+		// META-INF/spring.factories 中获取 AutoConfigurationImportListener 的类
 		return SpringFactoriesLoader.loadFactories(AutoConfigurationImportListener.class, this.beanClassLoader);
 	}
 

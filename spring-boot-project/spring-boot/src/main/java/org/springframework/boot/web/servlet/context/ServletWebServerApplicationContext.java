@@ -119,6 +119,7 @@ public class ServletWebServerApplicationContext extends GenericWebApplicationCon
 	 * Create a new {@link ServletWebServerApplicationContext}.
 	 */
 	public ServletWebServerApplicationContext() {
+		super();
 	}
 
 	/**
@@ -136,6 +137,7 @@ public class ServletWebServerApplicationContext extends GenericWebApplicationCon
 	 */
 	@Override
 	protected void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) {
+		// 注册 BeanPostProcessor
 		beanFactory.addBeanPostProcessor(new WebApplicationContextServletContextAwareProcessor(this));
 		beanFactory.ignoreDependencyInterface(ServletContextAware.class);
 		registerWebApplicationScopes();

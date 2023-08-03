@@ -96,6 +96,7 @@ public abstract class AutoConfigurationPackages {
 			beanDefinition.addBasePackages(packageNames);
 		}
 		else {
+			// 注册 beanDefinition
 			registry.registerBeanDefinition(BEAN, new BasePackagesBeanDefinition(packageNames));
 		}
 	}
@@ -108,6 +109,7 @@ public abstract class AutoConfigurationPackages {
 
 		@Override
 		public void registerBeanDefinitions(AnnotationMetadata metadata, BeanDefinitionRegistry registry) {
+			// 推断 包名
 			register(registry, new PackageImports(metadata).getPackageNames().toArray(new String[0]));
 		}
 
