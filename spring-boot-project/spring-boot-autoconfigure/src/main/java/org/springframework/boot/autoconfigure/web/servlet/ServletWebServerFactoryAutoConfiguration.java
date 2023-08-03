@@ -68,9 +68,10 @@ import org.springframework.web.filter.ForwardedHeaderFilter;
 @ConditionalOnWebApplication(type = Type.SERVLET)
 @EnableConfigurationProperties(ServerProperties.class)
 @Import({ ServletWebServerFactoryAutoConfiguration.BeanPostProcessorsRegistrar.class,
-		ServletWebServerFactoryConfiguration.EmbeddedTomcat.class,
+		ServletWebServerFactoryConfiguration.EmbeddedTomcat.class,// 注入 TomcatServletWebServerFactory
 		ServletWebServerFactoryConfiguration.EmbeddedJetty.class,
 		ServletWebServerFactoryConfiguration.EmbeddedUndertow.class })
+// 会找到这个类
 public class ServletWebServerFactoryAutoConfiguration {
 
 	@Bean

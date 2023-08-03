@@ -66,6 +66,7 @@ import org.springframework.web.servlet.DispatcherServlet;
 @AutoConfiguration(after = ServletWebServerFactoryAutoConfiguration.class)
 @ConditionalOnWebApplication(type = Type.SERVLET)
 @ConditionalOnClass(DispatcherServlet.class)
+// 自动装配
 public class DispatcherServletAutoConfiguration {
 
 	/**
@@ -84,6 +85,9 @@ public class DispatcherServletAutoConfiguration {
 	@EnableConfigurationProperties(WebMvcProperties.class)
 	protected static class DispatcherServletConfiguration {
 
+		/**
+		 * 创建 dispatcherServlet
+		 */
 		@Bean(name = DEFAULT_DISPATCHER_SERVLET_BEAN_NAME)
 		public DispatcherServlet dispatcherServlet(WebMvcProperties webMvcProperties) {
 			DispatcherServlet dispatcherServlet = new DispatcherServlet();

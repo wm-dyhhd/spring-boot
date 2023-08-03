@@ -470,6 +470,8 @@ public class AutoConfigurationImportSelector implements DeferredImportSelector, 
 				.collect(Collectors.toCollection(LinkedHashSet::new));
 			processedConfigurations.removeAll(allExclusions);
 
+			// tomcat 情况下找到的时 ServletWebServerFactoryAutoConfiguration 类
+
 			return sortAutoConfigurations(processedConfigurations, getAutoConfigurationMetadata()).stream()
 				.map((importClassName) -> new Entry(this.entries.get(importClassName), importClassName))
 				.collect(Collectors.toList());
