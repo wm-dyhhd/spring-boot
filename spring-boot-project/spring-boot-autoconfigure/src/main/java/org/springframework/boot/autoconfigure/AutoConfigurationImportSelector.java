@@ -95,7 +95,9 @@ public class AutoConfigurationImportSelector implements DeferredImportSelector, 
 
 	@Override
 	public String[] selectImports(AnnotationMetadata annotationMetadata) {
+		// 是否允许自动注入
 		if (!isEnabled(annotationMetadata)) {
+			// 不允许返回空
 			return NO_IMPORTS;
 		}
 		AutoConfigurationEntry autoConfigurationEntry = getAutoConfigurationEntry(annotationMetadata);

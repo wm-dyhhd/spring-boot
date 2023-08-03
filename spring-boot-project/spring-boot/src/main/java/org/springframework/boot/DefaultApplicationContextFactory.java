@@ -45,6 +45,7 @@ class DefaultApplicationContextFactory implements ApplicationContextFactory {
 	@Override
 	public ConfigurableApplicationContext create(WebApplicationType webApplicationType) {
 		try {
+			// 根据 webApplicationType 船舰应用程序的上下文，一般是 AnnotationConfigServletWebServerApplicationContext
 			return getFromSpringFactories(webApplicationType, ApplicationContextFactory::create,
 					AnnotationConfigApplicationContext::new);
 		}

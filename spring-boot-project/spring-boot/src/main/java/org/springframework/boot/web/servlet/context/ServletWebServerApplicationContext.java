@@ -147,6 +147,7 @@ public class ServletWebServerApplicationContext extends GenericWebApplicationCon
 			super.refresh();
 		}
 		catch (RuntimeException ex) {
+			// 启动失败时 关闭  webServer
 			WebServer webServer = this.webServer;
 			if (webServer != null) {
 				webServer.stop();
@@ -157,8 +158,10 @@ public class ServletWebServerApplicationContext extends GenericWebApplicationCon
 
 	@Override
 	protected void onRefresh() {
+		// 调用 refresh 方法的时候会对该方法进行回调
 		super.onRefresh();
 		try {
+			// 创建 tomcat 容器，启动容器
 			createWebServer();
 		}
 		catch (Throwable ex) {
@@ -174,17 +177,24 @@ public class ServletWebServerApplicationContext extends GenericWebApplicationCon
 		super.doClose();
 	}
 
+	/**
+	 * 创建 web  server 服务器
+	 */
 	private void createWebServer() {
 		WebServer webServer = this.webServer;
 		ServletContext servletContext = getServletContext();
 		if (webServer == null && servletContext == null) {
 			StartupStep createWebServer = this.getApplicationStartup().start("spring.boot.webserver.create");
+			// 可以找到 TomcatServletWebServerFactory
 			ServletWebServerFactory factory = getWebServerFactory();
 			createWebServer.tag("factory", factory.getClass().toString());
+			// 获取应用程序 TomcatWebServer
 			this.webServer = factory.getWebServer(getSelfInitializer());
 			createWebServer.end();
+			// 注册容器 优雅关闭
 			getBeanFactory().registerSingleton("webServerGracefulShutdown",
 					new WebServerGracefulShutdownLifecycle(this.webServer));
+			// 注册容器 Web 服务器启动-停止生命周期
 			getBeanFactory().registerSingleton("webServerStartStop",
 					new WebServerStartStopLifecycle(this, this.webServer));
 		}
@@ -196,6 +206,7 @@ public class ServletWebServerApplicationContext extends GenericWebApplicationCon
 				throw new ApplicationContextException("Cannot initialize servlet context", ex);
 			}
 		}
+		// web 配置华宁回调
 		initPropertySources();
 	}
 
@@ -207,6 +218,7 @@ public class ServletWebServerApplicationContext extends GenericWebApplicationCon
 	 */
 	protected ServletWebServerFactory getWebServerFactory() {
 		// Use bean names so that we don't consider the hierarchy
+		// 找到 TomcatServletWebServerFactory
 		String[] beanNames = getBeanFactory().getBeanNamesForType(ServletWebServerFactory.class);
 		if (beanNames.length == 0) {
 			throw new MissingWebServerFactoryBeanException(getClass(), ServletWebServerFactory.class,
@@ -230,7 +242,9 @@ public class ServletWebServerApplicationContext extends GenericWebApplicationCon
 	}
 
 	private void selfInitialize(ServletContext servletContext) throws ServletException {
+		// 准备 Web 应用程序上下文
 		prepareWebApplicationContext(servletContext);
+		// 注册应用程序范围
 		registerApplicationScope(servletContext);
 		WebApplicationContextUtils.registerEnvironmentBeans(getBeanFactory(), servletContext);
 		for (ServletContextInitializer beans : getServletContextInitializerBeans()) {
